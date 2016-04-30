@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title>Regions - Italy</title>
+	<style type="text/css">
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      #tail {
+        position: absolute;
+        padding: 10px;
+        z-index: 50;
+        background: rgba(255,255,255,0.9);
+        border: 2px solid #00519e;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body> 
+    <div id="map-canvas"></div>
+	<div id="tail" style="display: none"></div>
+    <script>
+
+	  var map;
+
+      function initMap() {
+
+	    var italy =  {lat: 41.913355, lng: 12.484130};
+
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+          center: italy,
+          zoom: 6
+        });
+
+        // Load a GeoJSON from the same server as our demo.
+        map.data.loadGeoJson('json/regioni.json',{ idPropertyName: 'regione' });
+  	    
+        // Add some style.
+        map.data.setStyle(function(feature) {
+        	return ({
+        		strokeWeight: 1
+        	});
+        });
+  	    
+        // Set mouseover event for each feature.
+        map.data.addListener('mouseover', function(e) {
+          document.getElementById('tail').textContent =  e.feature.getId();
+          document.getElementById('tail').style.display = "inline";
+          map.data.overrideStyle(e.feature, {fillColor: 'red'});
+        });
+  	    
+        // Set mouseout event for each feature.
+        map.data.addListener('mouseout', function(e) {
+          document.getElementById('tail').style.display = "none";
+          map.data.revertStyle();
+        });
+  	    
+        // Change color when the feature is clicked.
+        map.data.addListener('click', function(e) {
+          map.data.overrideStyle(e.feature, {fillColor: 'blue'});
+        });
+  	    
+        // Get mouse coordinates and created dynamc box.
+        document.body.onmousemove = function(e) {
+          document.getElementById("tail").style.left = e.clientX + 25 + 'px';
+          document.getElementById("tail").style.top = e.clientY + 'px';
+        };
+
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+  </body>
+</html>
