@@ -19,7 +19,7 @@
 		{
 			"type": "Feature",
 			"properties": {
-				"regione": "Basillicata"
+				"regione": "Basilicata"
 			},
 			"geometry": {
 				"type": "Polygon",
